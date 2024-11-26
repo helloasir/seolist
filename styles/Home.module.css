@@ -53,3 +53,24 @@
 .button:hover {
   background-color: #005bb5;
 }
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem; /* Adds space between all child elements */
+}
+
+.link {
+  text-decoration: none;
+  color: #0070f3;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.spacer {
+  width: 1rem; /* Creates space */
+}
+

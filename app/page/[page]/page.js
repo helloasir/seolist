@@ -40,6 +40,23 @@ export default async function PaginatedPage({ params }) {
   return (
     <div className={styles.container}>
       <h1 className={styles.pageTitle}>Domain List {currentPage}</h1>
+      <div className={styles.pagination}>
+        {currentPage > 1 && (
+          <Link href={`/page/${currentPage - 1}`} className={styles.link}>
+            Previous
+          </Link>
+        )}
+                  {/* Add Home Page Link */}
+                  <span className={styles.spacer}></span>
+          <Link href="/" className={styles.link}>
+            Home
+          </Link>
+        {currentPage < total && (
+          <Link href={`/page/${currentPage + 1}`} className={styles.link}>
+            Next
+          </Link>
+        )}
+      </div>
 
       <table className={styles.table}>
         <thead>
@@ -72,9 +89,14 @@ export default async function PaginatedPage({ params }) {
       <div className={styles.pagination}>
         {currentPage > 1 && (
           <Link href={`/page/${currentPage - 1}`} className={styles.link}>
-            Previous
+            Previous 
           </Link>
         )}
+          {/* Add Home Page Link */}
+          <span className={styles.spacer}></span>
+          <Link href="/" className={styles.link}>
+            Home
+          </Link>
         {currentPage < total && (
           <Link href={`/page/${currentPage + 1}`} className={styles.link}>
             Next
