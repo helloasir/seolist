@@ -1,63 +1,112 @@
+'use client';
+
 import Link from 'next/link';
-import { paginate, totalPages } from '../utils/pagination';
-import data from '../data/staticData.json';
-import styles from '../styles/Home.module.css';  // Ensure correct import path
+import { useState } from 'react';
 
-const ITEMS_PER_PAGE = 100;
+export default function Home() {
+  const [domains] = useState([
+    'google.com',
+    'facebook.com',
+    'youtube.com',
+    'twitter.com',
+  ]);
 
-export const generateMetadata = async ({ params }) => {
-  const currentPage = parseInt(params.page) || 1;
-  const title = `Domain List ${currentPage}`;
-  const description = `Browse domains on page ${currentPage}. Showing ${ITEMS_PER_PAGE} items per page.`;
-
-  return {
-    title: title,
-    description: description,
-    openGraph: {
-      title: title,
-      description: description,
-    },
-  };
-};
-
-export default function MainPage() {
-  const paginatedData = paginate(data, 1, ITEMS_PER_PAGE);  // For page 1
-  const total = totalPages(data, ITEMS_PER_PAGE);
+  const [pages] = useState([
+    'page/2',
+    'page/3',
+    'page/4',
+    'page/5',
+  ]);
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.pageTitle}>Domain List</h1>
+    <div className="container">
+      <header>
+        <h1>Welcome</h1>
+      </header>
 
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>Rank</th>
-            <th>Domain</th>
-          </tr>
-        </thead>
-        <tbody>
-          {paginatedData.map((item) => {
-            const domainSlug = item.Domain && item.Domain.toLowerCase().replace(/\s+/g, '-');
-            return (
-              <tr key={item.Rank}>
-                <td>{item.Rank}</td>
-                <td>
-                  <Link href={`/domain/${domainSlug}`} className={styles.link}>
-                    {item.Domain}
-                  </Link>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      <main>
+        {/* Featured Domains Section */}
+        <section>
+          <h2>Featured Domains</h2>
+          <ul>
+            {domains.map((domain, index) => (
+              <li key={index}>
+                <Link href={`/domain/${domain}`}>{domain}</Link>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-      <div className={styles.pagination}>
-        <Link href={`/page/1`} className={styles.link}>
-          Page 1
-        </Link>
-        {/* Add more pagination if needed */}
-      </div>
+        {/* Featured Pages Section */}
+        <section>
+          <h2>Featured Pages</h2>
+          <ul>
+            {pages.map((page, index) => (
+              <li key={index}>
+                <Link href={`/${page}`}>{page}</Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </main>
+
+      <footer>
+        <p>&copy; 2024 My App. All rights reserved.</p>
+      </footer>
+
+      <style jsx>{`
+        .container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: space-between;
+          min-height: 667px;
+          max-width: 375px;
+          margin: 0 auto;
+          font-family: Arial, sans-serif;
+        }
+        header {
+          background-color: #0070f3;
+          color: white;
+          width: 100%;
+          text-align: center;
+          padding: 1rem;
+        }
+        h1 {
+          font-size: 1.5rem;
+        }
+        main {
+          flex-grow: 1;
+          width: 100%;
+          padding: 1rem;
+        }
+        section {
+          margin-bottom: 2rem;
+        }
+        ul {
+          list-style: none;
+          padding: 0;
+        }
+        li {
+          margin: 0.5rem 0;
+        }
+        a {
+          text-decoration: none;
+          color: #0070f3;
+        }
+        a:hover {
+          text-decoration: underline;
+        }
+        footer {
+          background-color: #f5f5f5;
+          width: 100%;
+          text-align: center;
+          padding: 1rem;
+        }
+        p {
+          font-size: 0.8rem;
+        }
+      `}</style>
     </div>
   );
 }
