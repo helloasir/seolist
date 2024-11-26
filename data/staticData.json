@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [{"Rank": "1", "Domain": "google.com", "data1": "data1", "data2": "data2", "data3": "data3"},
 {"Rank": "2", "Domain": "facebook.com", "data1": "data1", "data2": "data2", "data3": "data3"},
 {"Rank": "3", "Domain": "youtube.com", "data1": "data1", "data2": "data2", "data3": "data3"},
@@ -998,3 +999,8 @@
 {"Rank": "998", "Domain": "foodnetwork.com", "data1": "data1", "data2": "data2", "data3": "data3"},
 {"Rank": "999", "Domain": "lg.com", "data1": "data1", "data2": "data2", "data3": "data3"},
 {"Rank": "1000", "Domain": "msnbc.com", "data1": "data1", "data2": "data2", "data3": "data3"}]
+=======
+version https://git-lfs.github.com/spec/v1
+oid sha256:d20f4b66ff1183be6ce6e9b80fd29f9b745550eefb3f4cf181d7f4fbb8dbe9eb
+size 71346221
+>>>>>>> b59a695 (small file)
