@@ -1,95 +1,63 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import Link from 'next/link';
+import { paginate, totalPages } from '../utils/pagination';
+import data from '../data/staticData.json';
+import styles from '../styles/Home.module.css';  // Ensure correct import path
 
-export default function Home() {
+const ITEMS_PER_PAGE = 100;
+
+export const generateMetadata = async ({ params }) => {
+  const currentPage = parseInt(params.page) || 1;
+  const title = `Domain List ${currentPage}`;
+  const description = `Browse domains on page ${currentPage}. Showing ${ITEMS_PER_PAGE} items per page.`;
+
+  return {
+    title: title,
+    description: description,
+    openGraph: {
+      title: title,
+      description: description,
+    },
+  };
+};
+
+export default function MainPage() {
+  const paginatedData = paginate(data, 1, ITEMS_PER_PAGE);  // For page 1
+  const total = totalPages(data, ITEMS_PER_PAGE);
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className={styles.container}>
+      <h1 className={styles.pageTitle}>Domain List</h1>
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      <table className={styles.table}>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Domain</th>
+          </tr>
+        </thead>
+        <tbody>
+          {paginatedData.map((item) => {
+            const domainSlug = item.Domain && item.Domain.toLowerCase().replace(/\s+/g, '-');
+            return (
+              <tr key={item.Rank}>
+                <td>{item.Rank}</td>
+                <td>
+                  <Link href={`/domain/${domainSlug}`} className={styles.link}>
+                    {item.Domain}
+                  </Link>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+
+      <div className={styles.pagination}>
+        <Link href={`/page/1`} className={styles.link}>
+          Page 1
+        </Link>
+        {/* Add more pagination if needed */}
+      </div>
     </div>
   );
 }
