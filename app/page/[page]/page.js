@@ -4,7 +4,6 @@ import data from '../../../data/staticData.json'; // Assuming data is in staticD
 import styles from '../../../styles/Home.module.css';
 
 const ITEMS_PER_PAGE = 100;
-export const maxDuration = 300;
 
 // SEO Metadata for each page
 export const generateMetadata = async ({ params }) => {
