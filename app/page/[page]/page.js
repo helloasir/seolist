@@ -1,12 +1,12 @@
 import Link from 'next/link';
 import { paginate, totalPages } from '../../../utils/pagination';
-import data from '../../../data/staticData.json'; // Assuming data is in staticData.json
 import styles from '../../../styles/Home.module.css';
 
 const ITEMS_PER_PAGE = 1000;
+const DATA_URL = 'https://pub-d11224d3592c4a5994c22e5e3fc303e7.r2.dev/webs_small.json';
 
 // SEO Metadata for each page
-export const generateMetadata = async ({ params }) => {
+export async function generateMetadata({ params }) {
   const currentPage = parseInt(params.page) || 1;
   const title = `Domain List ${currentPage}`;
   const description = `Browse domains on page ${currentPage}. Showing ${ITEMS_PER_PAGE} items per page.`;
@@ -19,10 +19,33 @@ export const generateMetadata = async ({ params }) => {
       description: description,
     },
   };
-};
+}
 
 export default async function PaginatedPage({ params }) {
-  const currentPage = parseInt(params.page) || 1;
+  // Await params as it is asynchronous in nature
+  const { page } = await params;
+  const currentPage = parseInt(page) || 1;
+
+  // Fetch data from the external JSON file
+  let data = [];
+  try {
+    const response = await fetch(DATA_URL, { next: { revalidate: 60 } }); // Revalidate after 60 seconds for cache
+    if (!response.ok) {
+      throw new Error('Failed to fetch data');
+    }
+    data = await response.json();
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return (
+      <div className={styles.container}>
+        <h1 className={styles.pageTitle}>Error Loading Data</h1>
+        <Link href="/page/1" className={styles.link}>
+          Go to Page 1
+        </Link>
+      </div>
+    );
+  }
+
   const paginatedData = paginate(data, currentPage, ITEMS_PER_PAGE);
   const total = totalPages(data, ITEMS_PER_PAGE);
 
@@ -46,11 +69,10 @@ export default async function PaginatedPage({ params }) {
             Previous
           </Link>
         )}
-                  {/* Add Home Page Link */}
-                  <span className={styles.spacer}></span>
-          <Link href="/" className={styles.link}>
-            Home
-          </Link>
+        <span className={styles.spacer}></span>
+        <Link href="/" className={styles.link}>
+          Home
+        </Link>
         {currentPage < total && (
           <Link href={`/page/${currentPage + 1}`} className={styles.link}>
             Next
@@ -67,10 +89,10 @@ export default async function PaginatedPage({ params }) {
         </thead>
         <tbody>
           {paginatedData.map((item) => {
-            // Ensure that Domain exists before calling .replace()
-            const domainSlug = item.Domain && typeof item.Domain === 'string'
-              ? item.Domain.toLowerCase().replace(/\s+/g, '-')
-              : ''; // Fallback to empty string if Domain is undefined or not a string
+            const domainSlug =
+              item.Domain && typeof item.Domain === 'string'
+                ? item.Domain.toLowerCase().replace(/\s+/g, '-')
+                : '';
 
             return (
               <tr key={item.Rank}>
@@ -89,14 +111,13 @@ export default async function PaginatedPage({ params }) {
       <div className={styles.pagination}>
         {currentPage > 1 && (
           <Link href={`/page/${currentPage - 1}`} className={styles.link}>
-            Previous 
+            Previous
           </Link>
         )}
-          {/* Add Home Page Link */}
-          <span className={styles.spacer}></span>
-          <Link href="/" className={styles.link}>
-            Home
-          </Link>
+        <span className={styles.spacer}></span>
+        <Link href="/" className={styles.link}>
+          Home
+        </Link>
         {currentPage < total && (
           <Link href={`/page/${currentPage + 1}`} className={styles.link}>
             Next
