@@ -3,7 +3,7 @@ import { paginate, totalPages } from '../../../utils/pagination';
 import data from '../../../data/staticData.json'; // Assuming data is in staticData.json
 import styles from '../../../styles/Home.module.css';
 
-const ITEMS_PER_PAGE = 100;
+const ITEMS_PER_PAGE = 1000;
 
 // SEO Metadata for each page
 export const generateMetadata = async ({ params }) => {
